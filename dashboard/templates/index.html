@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Drain Dashboard</title>
+</head>
+<body>
+
+<h1>Smart Drain Monitoring</h1>
+
+<h2 id="level">Loading...</h2>
+
+<script>
+
+function update(){
+
+fetch("/api/sensor/")
+.then(response => response.json())
+.then(data => {
+
+if(data.latest){
+
+document.getElementById("level").innerHTML =
+"Water Level : " + data.latest.water_level + " cm";
+
+}
+
+});
+
+}
+
+update();
+
+setInterval(update,1000);
+
+</script>
+
+</body>
+</html>

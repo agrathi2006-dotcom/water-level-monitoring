@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Drain Monitoring</title>
+
+    <style>
+        body{
+            font-family: Arial;
+            text-align:center;
+            background:#f4f4f4;
+        }
+
+        .card{
+            width:400px;
+            margin:60px auto;
+            background:white;
+            padding:30px;
+            border-radius:15px;
+            box-shadow:0 0 15px gray;
+        }
+
+        h1{
+            color:#007bff;
+        }
+
+        #distance{
+            font-size:60px;
+            color:red;
+            font-weight:bold;
+        }
+
+        #status{
+            font-size:30px;
+            margin-top:20px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>Smart Drain Monitoring</h1>
+
+<h3>Live Water Level</h3>
+
+<div id="distance">
+Loading...
+</div>
+
+<div id="status">
+Waiting...
+</div>
+
+</div>
+
+<script>
+
+function updateData(){
+
+fetch("/api/sensor/")
+.then(response=>response.json())
+.then(data=>{
+
+let value=data.latest.water_level;
+
+document.getElementById("distance").innerHTML=value+" cm";
+
+if(value>40)
+{
+document.getElementById("status").innerHTML="🟢 Normal";
+}
+else if(value>20)
+{
+document.getElementById("status").innerHTML="🟡 Warning";
+}
+else
+{
+document.getElementById("status").innerHTML="🔴 Danger";
+}
+
+});
+
+}
+
+updateData();
+
+setInterval(updateData,1000);
+
+</script>
+
+</body>
+</html>
